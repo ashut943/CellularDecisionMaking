@@ -21,7 +21,7 @@ gradients_exp_fit = exp_decay_model(N_fit, fit_exp.param)
 
 scatter(N_vals, gradients, label="Observed Gradients", xlabel="N", ylabel="Gradient", title="Gradient as a Function of N", marker=:x, color=:black)
 plot!(N_fit, gradients_power_fit, label="Power-law Fit", linestyle=:dash)
-plot!(N_fit, gradients_exp_fit, label="Exponential Decay Fit", linestyle=:dot)
+# plot!(N_fit, gradients_exp_fit, label="Exponential Decay Fit", linestyle=:dot)
 
 println("Power-law model: Gradient(N) ≈ $a_power * N^(-$b_power)")
 println("Exponential decay model: Gradient(N) ≈ $a_exp * exp(-$b_exp * N)")

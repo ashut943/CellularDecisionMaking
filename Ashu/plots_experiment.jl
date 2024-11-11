@@ -13,6 +13,8 @@ plot(
     lw=2, framestyle=:box
 )
 
+# df = DataFrame(Lambda_Values = λ_vals_to_plot, Tau_0_Values = τ_0_values, IsIrreducible = isirreducible_values,Tau_tilde_bounds=τ_tilde_bounds,IsTransitionPoint = transition_column)
+
 palette = [RGB(0.3, 0.55, 0.75), RGB(0.8, 0.47, 0.44), RGB(0.35, 0.7, 0.5), RGB(0.5, 0.6, 0.7), RGB(0.6, 0.5, 0.8), RGB(0.7, 0.4, 0.4), RGB(0.4, 0.7, 0.9)]
 
 for (i, N) in enumerate(Nvals)
@@ -27,28 +29,29 @@ for (i, N) in enumerate(Nvals)
         df = CSV.read(curr_csv_filename * ".csv", DataFrame)
         λ_vals_to_plot_ = df.Lambda_Values
         τ_0_values_ = df.Tau_0_Values
+        τ_tilde_bounds_values_=df.Tau_tilde_bounds
         valid_indices = findall(x -> x >= start_val, λ_vals_to_plot_)
         λ_vals_to_plot_ = λ_vals_to_plot_[valid_indices]
-        τ_0_values_ = τ_0_values_[valid_indices]
+        τ_0_values_ = τ_tilde_bounds_values_[valid_indices]
         valid_indices = findall(x -> x > 0, λ_vals_to_plot_) ∩ findall(x -> x > 0, τ_0_values_)
         λ_vals_to_plot_filtered = λ_vals_to_plot_[valid_indices]
         τ_0_values_filtered = τ_0_values_[valid_indices]
 
-        log_λ_vals = log.(λ_vals_to_plot_filtered)
-        log_τ_vals = log.(τ_0_values_filtered)
+        # log_λ_vals = log.(λ_vals_to_plot_filtered)
+        # log_τ_vals = log.(τ_0_values_filtered)
 
-        model(x, p) = p[1] .+ p[2] .* x
-        initial_params = [0.0, 1.0]
-        fit = LsqFit.curve_fit(model, log_λ_vals, log_τ_vals, initial_params)
-        slope = fit.param[2]
-        intercept = fit.param[1]
-        println("Gradient (slope) of log-log plot for N = $N: ", slope)
+        # model(x, p) = p[1] .+ p[2] .* x
+        # initial_params = [0.0, 1.0]
+        # fit = LsqFit.curve_fit(model, log_λ_vals, log_τ_vals, initial_params)
+        # slope = fit.param[2]
+        # intercept = fit.param[1]
+        # println("Gradient (slope) of log-log plot for N = $N: ", slope)
 
-        λ_vals_fit = range(start_val, stop=300, length=100)
-        τ_0_vals_fit = exp.(intercept .+ slope .* log.(λ_vals_fit))
+        # λ_vals_fit = range(start_val, stop=300, length=100)
+        # τ_0_vals_fit = exp.(intercept .+ slope .* log.(λ_vals_fit))
 
-        scatter!(λ_vals_to_plot_filtered, τ_0_values_filtered, color=palette[i], marker=:circle, markersize=2, label=L"N"*"= $(N)")
-        plot!(λ_vals_fit, τ_0_vals_fit, lw=2, linestyle=:dash, color=palette[i], label="")
+        plot!(λ_vals_to_plot_filtered, τ_0_values_filtered, color=palette[i], markersize=2, label=L"N"*"= $(N)")
+        # plot!(λ_vals_fit, τ_0_vals_fit, lw=2, linestyle=:dash, color=palette[i], label="")
     else
         println("File not found: $curr_csv_filename")
     end

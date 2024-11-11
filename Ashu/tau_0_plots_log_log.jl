@@ -8,7 +8,7 @@ lambda_end_now = 300.0
 start_val = 10
 
 plot(
-    title="λ vs Optimal τ₀ for Various N (Log-Log Scale)",
+    # title="λ vs Optimal τ₀ for Various N (Log-Log Scale)",
     xlabel=L"\operatorname{log}(\lambda)", ylabel=L"\operatorname{log}(\tau^*_0)",
     xscale=:log10, yscale=:log10,
     lw=2, framestyle=:box
@@ -43,7 +43,7 @@ for (i, N) in enumerate(Nvals)
         slope = fit.param[2]
         println("Gradient (slope) of log-log plot for N = $N: ", slope)
 
-        scatter!(log_λ_vals, log_τ_vals, color=palette[i], marker=:circle, markersize=2, label=L"N"*"= $(N)")
+        scatter!(log_λ_vals, log_τ_vals, color=palette[i], marker=:circle, markersize=2, label="N = $(N)")
         log_λ_vals_fit = range(log(start_val), stop=maximum(log_λ_vals), length=100)
         plot!(log_λ_vals_fit, model(log_λ_vals_fit, fit.param), lw=2, linestyle=:dash, color=palette[i], label="")
     else

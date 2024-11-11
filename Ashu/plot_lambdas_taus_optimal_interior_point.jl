@@ -8,8 +8,8 @@ lambda_end_now = 300.0
 start_val = 10
 
 plot(
-    title="λ vs Optimal τ₀ for Various N (Log-Log Scale)",
-    xlabel=L"\operatorname{log}(\lambda)", ylabel=L"\operatorname{log}(\tau^*_0)",
+    # title="λ vs Optimal τ₀ for Various N",
+    xlabel=L"\lambda", ylabel=L"\tau^*_0",
     lw=2, framestyle=:box
 )
 
@@ -47,7 +47,7 @@ for (i, N) in enumerate(Nvals)
         λ_vals_fit = range(start_val, stop=300, length=100)
         τ_0_vals_fit = exp.(intercept .+ slope .* log.(λ_vals_fit))
 
-        scatter!(λ_vals_to_plot_filtered, τ_0_values_filtered, color=palette[i], marker=:circle, markersize=2, label=L"N"*"= $(N)")
+        scatter!(λ_vals_to_plot_filtered, τ_0_values_filtered, color=palette[i], marker=:circle, markersize=2, label="N = $(N)")
         plot!(λ_vals_fit, τ_0_vals_fit, lw=2, linestyle=:dash, color=palette[i], label="")
     else
         println("File not found: $curr_csv_filename")

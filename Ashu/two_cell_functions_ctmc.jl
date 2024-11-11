@@ -405,7 +405,7 @@ function run_pipeline_for_various_lambda(N::Int, lambda_values::Vector{Float64},
     τ_0_values = [] 
     τ_tilde_bounds=[]   
     isirreducible_values=[]
-    λ_transition=0
+    λ_transition=300
     for λ in lambda_values
         currlambdaforfilename=round(Int,λ*100)
 
@@ -497,7 +497,7 @@ function run_pipeline_for_various_lambda(N::Int, lambda_values::Vector{Float64},
         what_is_the_current_status=plot_ctmc_invar_distn_our_problem(Q_opt,  N, invariant_heatmap_simulation_filename, λ)
 
         if(what_is_the_current_status)
-            λ_transition=λ
+            λ_transition=minimum([λ,λ_transition])
         end
 
         frame_filename = generate_filename(overall_movie_folder, @sprintf("final_frame_lambda_%s",lambda_str))

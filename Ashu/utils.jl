@@ -1,4 +1,4 @@
-using JuMP, Ipopt, Plots, Printf, LinearAlgebra, SCS, COSMO, Distributions, LightGraphs, FileIO, VideoIO
+using JuMP, Ipopt, Plots, Printf, LinearAlgebra, SCS, COSMO, Distributions, LightGraphs, FileIO, ImageIO, VideoIO,ProgressMeter, FFMPEG
 
 function generate_filename(folder_name,base_name::String)
     return joinpath(folder_name, @sprintf("%s", base_name))
@@ -179,14 +179,33 @@ function log_to_file(msg)
     println(log_file, msg)       # Write to file
 end
 
+function extract_lambda_value(filename::String)::Float64
+    parts = split(filename, '_')
+    idx = findfirst(x -> x == "lambda", parts)
+    if idx !== nothing && idx < length(parts)
+        try
+            return parse(Float64, parts[idx + 1])
+        catch
+            return Inf
+        end
+    end
+    return Inf
+end
 
 function create_movie(input_folder::String, output_file::String; frame_rate::Int = 10)
-    frames = sort(filter(f -> endswith(f, ".png"), readdir(input_folder; join=true)))
-    writer = VideoIO.openvideo(output_file, framerate=frame_rate)
-    for frame in frames
-        img = VideoIO.readvideo(frame)
-        VideoIO.writevideo(writer, img)
+    frames = sort(filter(f -> endswith(f, ".png"), readdir(input_folder; join=true)), by = x -> extract_lambda_value(x))
+    
+    if isempty(frames)
+        println("No frames found in the specified input folder.")
+        return
     end
-    VideoIO.close(writer)
-    println("Video created at $output_file")
+    list_file = joinpath(input_folder, "frames_list.txt")
+    open(list_file, "w") do io
+        for frame in frames
+            println(io, "file '" * abspath(frame) * "'")
+        end
+    end
+    ffmpeg_cmd = `"/opt/homebrew/bin/ffmpeg" -f concat -safe 0 -r $frame_rate -i $list_file -pix_fmt yuv420p -crf 20 -preset medium -y $output_file`
+    run(ffmpeg_cmd)
+    rm(list_file)
 end
