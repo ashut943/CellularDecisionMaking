@@ -1,20 +1,20 @@
-using JuMP, Ipopt, Plots, Printf, LinearAlgebra, SCS, COSMO, Distributions, LightGraphs, FileIO, CSV, DataFrames, LsqFit
+using JuMP, Ipopt, Plots, Printf, LinearAlgebra, SCS, COSMO, Distributions, LightGraphs, FileIO, CSV, DataFrames, LsqFit, LaTeXStrings
 include("utils.jl")
 include("two_cell_functions_ctmc.jl")
 
-Nvals = [2, 3, 4, 5, 6]
+Nvals = [2, 3, 4, 5, 6, 7]
 lambda_start_now = 0.0
 lambda_end_now = 300.0
 start_val = 10
 
 plot(
     title="λ vs Optimal τ₀ for Various N (Log-Log Scale)",
-    xlabel="log(λ)", ylabel="log(optimal τ₀)",
+    xlabel=L"\operatorname{log}(\lambda)", ylabel=L"\operatorname{log}(\tau^*_0)",
     xscale=:log10, yscale=:log10,
     lw=2, framestyle=:box
 )
 
-palette = [RGB(0.3, 0.55, 0.75), RGB(0.8, 0.47, 0.44), RGB(0.35, 0.7, 0.5), RGB(0.5, 0.6, 0.7), RGB(0.6, 0.5, 0.8)]
+palette = [RGB(0.3, 0.55, 0.75), RGB(0.8, 0.47, 0.44), RGB(0.35, 0.7, 0.5), RGB(0.5, 0.6, 0.7), RGB(0.6, 0.5, 0.8), RGB(0.7, 0.4, 0.4), RGB(0.4, 0.7, 0.9)]
 
 for (i, N) in enumerate(Nvals)
     lambda_start_str = replace(string(lambda_start_now), "." => "_")
@@ -43,13 +43,12 @@ for (i, N) in enumerate(Nvals)
         slope = fit.param[2]
         println("Gradient (slope) of log-log plot for N = $N: ", slope)
 
-        scatter!(log_λ_vals, log_τ_vals, color=palette[i], marker=:circle, markersize=2, label="N = $N")
-        
+        scatter!(log_λ_vals, log_τ_vals, color=palette[i], marker=:circle, markersize=2, label=L"N"*"= $(N)")
         log_λ_vals_fit = range(log(start_val), stop=maximum(log_λ_vals), length=100)
         plot!(log_λ_vals_fit, model(log_λ_vals_fit, fit.param), lw=2, linestyle=:dash, color=palette[i], label="")
     else
         println("File not found: $curr_csv_filename")
     end
 end
-
 plot!()
+savefig("lambda_vs_optimal_tau0_upper_bounds_log_log_N2to7.png")

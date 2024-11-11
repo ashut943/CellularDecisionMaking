@@ -454,7 +454,7 @@ function run_pipeline_for_various_lambda(N::Int, lambda_values::Vector{Float64},
         println(is_irreducible(Q_opt))
 
         if (!is_irreducible(Q_opt))
-            println("SKIPPED ->",λ, ",",tau_opt[1]," : The solution found leads to an irreducible rate matrix")
+            println("SKIPPED ->",λ, ",",tau_opt[1]," : The solution found leads to a redducible rate matrix")
             initialtauval=0.0
             initialPval=1
             continue
@@ -516,7 +516,7 @@ function run_pipeline_for_various_lambda(N::Int, lambda_values::Vector{Float64},
     savefig(plot_file_name*".svg")
 
     title_name=@sprintf("Upper Bound on τ̃ , N=%d",N)
-    display(plot(λ_vals_to_plot, τ_0_values, xlabel="λ", ylabel="Upper Bound on τ̃", lw=2, legend=false, title=title_name))
+    display(plot(λ_vals_to_plot, τ_tilde_bounds, xlabel="λ", ylabel="Upper Bound on τ̃", lw=2, legend=false, title=title_name))
     plot_file_name = generate_filename(overall_folder,"plot_of_tau_tilde_upper_bound_vs_lambda")
     savefig(plot_file_name*".png")
     savefig(plot_file_name*".svg")

@@ -1,19 +1,19 @@
-using JuMP, Ipopt, Plots, Printf, LinearAlgebra, SCS, COSMO, Distributions, LightGraphs, FileIO, CSV, DataFrames, LsqFit
+using JuMP, Ipopt, Plots, Printf, LinearAlgebra, SCS, COSMO, Distributions, LightGraphs, FileIO, CSV, DataFrames, LsqFit, LaTeXStrings
 include("utils.jl")
 include("two_cell_functions_ctmc.jl")
 
-Nvals = [2, 3, 4, 5, 6]
+Nvals = [2, 3, 4, 5, 6, 7]
 lambda_start_now = 0.0
 lambda_end_now = 300.0
-start_val = 1
+start_val = 10
 
 plot(
-    title="λ vs Optimal τ₀ for Various N",
-    xlabel="λ", ylabel="optimal τ₀",
-    lw=2, framestyle=:box, fontfamily="Helvetica"
+    title="λ vs Optimal τ₀ for Various N (Log-Log Scale)",
+    xlabel=L"\operatorname{log}(\lambda)", ylabel=L"\operatorname{log}(\tau^*_0)",
+    lw=2, framestyle=:box
 )
 
-palette = [RGB(0.3, 0.55, 0.75), RGB(0.8, 0.47, 0.44), RGB(0.35, 0.7, 0.5), RGB(0.5, 0.6, 0.7), RGB(0.6, 0.5, 0.8)]
+palette = [RGB(0.3, 0.55, 0.75), RGB(0.8, 0.47, 0.44), RGB(0.35, 0.7, 0.5), RGB(0.5, 0.6, 0.7), RGB(0.6, 0.5, 0.8), RGB(0.7, 0.4, 0.4), RGB(0.4, 0.7, 0.9)]
 
 for (i, N) in enumerate(Nvals)
     lambda_start_str = replace(string(lambda_start_now), "." => "_")
@@ -47,11 +47,12 @@ for (i, N) in enumerate(Nvals)
         λ_vals_fit = range(start_val, stop=300, length=100)
         τ_0_vals_fit = exp.(intercept .+ slope .* log.(λ_vals_fit))
 
-        scatter!(λ_vals_to_plot_filtered, τ_0_values_filtered, color=palette[i], marker=:circle, markersize=2, label="N = $N")
+        scatter!(λ_vals_to_plot_filtered, τ_0_values_filtered, color=palette[i], marker=:circle, markersize=2, label=L"N"*"= $(N)")
         plot!(λ_vals_fit, τ_0_vals_fit, lw=2, linestyle=:dash, color=palette[i], label="")
     else
         println("File not found: $curr_csv_filename")
     end
 end
 
+# Save the plot
 plot!()
