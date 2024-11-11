@@ -1,0 +1,34 @@
+---->Updated best lower bound: 0.2500000728227543
+========================================
+Node Depth: 0; Current Solution: (7.862907352917257, 0.2500000728227543); 7.612907280094503
+Current Bounds: (0.0, 68.625105043614, 13.7250210087228)
+Best Till now: (7.862907352917257, 0.2500000728227543)
+========================================
+Current child number: 0
+This child node has been added to the queue
+Current child number: 1
+Current child number: 2
+Current child number: 3
+Current child number: 4
+========================================
+Node Depth: 1; Current Solution: (7.862907352917257, 0.2500000728227543); 7.612907280094503
+Current Bounds: (0.0, 68.625105043614, 13.7250210087228)
+Best Till now: (7.862907352917257, 0.2500000728227543)
+========================================
+Current child number: 0
+This child node has been added to the queue
+Current child number: 1
+Current child number: 2
+Current child number: 3
+Current child number: 4
+========================================
+Node Depth: 2; Current Solution: (7.862907352917257, 0.2500000728227543); 7.612907280094503
+Current Bounds: (0.0, 68.625105043614, 13.7250210087228)
+Best Till now: (7.862907352917257, 0.2500000728227543)
+========================================
+Current child number: 0
+This child node has been added to the queue
+Current child number: 1
+Current child number: 2
+Current child number: 3
+Current child number: 4
